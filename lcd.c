@@ -37,7 +37,7 @@ void lcd_write_nibble(uint8_t nibble) {
   LCD_PORT = LCD_PORT & ~(1 << LCD_EN);
   LCD_PORT = LCD_PORT | (1 << LCD_EN);
   LCD_PORT = LCD_PORT & ~(1 << LCD_EN);
-  _delay_ms(0.04);
+  _delay_ms(0.3);																// If delay less than this value, the data is not correctly displayed  
 }
 
 void lcd_init(void) {
