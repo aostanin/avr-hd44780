@@ -156,10 +156,6 @@ void lcd_create_char(uint8_t location, uint8_t *charmap) {
 void lcd_set_cursor(uint8_t col, uint8_t row) {
   static uint8_t offsets[] = { 0x00, 0x40, 0x14, 0x54 };
 
-  if (row > 1) {
-    row = 1;
-  }
-
   lcd_command(LCD_SETDDRAMADDR | (col + offsets[row]));
 }
 
