@@ -151,6 +151,7 @@ void lcd_create_char(uint8_t location, uint8_t *charmap) {
   for (int i = 0; i < 8; i++) {
     lcd_write(charmap[i]);
   }
+  lcd_command(LCD_SETDDRAMADDR);
 }
 
 void lcd_set_cursor(uint8_t col, uint8_t row) {
