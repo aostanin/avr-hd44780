@@ -10,11 +10,31 @@ void lcd_write_nibble(uint8_t nibble);
 static uint8_t lcd_displayparams;
 static char lcd_buffer[LCD_COL_COUNT + 1];
 
+#if AUTO_NEXT_LINE
+    static uint8_t current_row;
+    static uint8_t current_column;
+#endif
+
 void lcd_command(uint8_t command) {
   lcd_send(command, 0);
 }
 
 void lcd_write(uint8_t value) {
+#if AUTO_NEXT_LINE
+  if(current_column == LCD_COL_COUNT) {
+    current_column = 0;
+    current_row++;
+
+    if(current_row == LCD_ROW_COUNT){
+      current_row = 0;
+    }
+
+    lcd_set_cursor(current_column, current_row);
+  }
+
+  current_column++;  
+#endif
+
   lcd_send(value, 1);
 }
 
@@ -76,6 +96,10 @@ void lcd_init(void) {
 
   lcd_displayparams = LCD_CURSOROFF | LCD_BLINKOFF;
   lcd_command(LCD_DISPLAYCONTROL | lcd_displayparams);
+
+#if AUTO_NEXT_LINE
+  current_row = current_column = 0;
+#endif
 }
 
 void lcd_on(void) {
@@ -91,6 +115,10 @@ void lcd_off(void) {
 void lcd_clear(void) {
   lcd_command(LCD_CLEARDISPLAY);
   _delay_ms(2);
+
+#if AUTO_NEXT_LINE
+  current_row = current_column = 0;
+#endif
 }
 
 void lcd_return_home(void) {
@@ -158,6 +186,11 @@ void lcd_set_cursor(uint8_t col, uint8_t row) {
   static uint8_t offsets[] = { 0x00, 0x40, 0x14, 0x54 };
 
   lcd_command(LCD_SETDDRAMADDR | (col + offsets[row]));
+
+#if AUTO_NEXT_LINE
+  current_row = row;
+  current_column = col;
+#endif
 }
 
 void lcd_puts(char *string) {
