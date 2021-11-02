@@ -19,6 +19,11 @@
 	#define LCD_D3 7
 #endif
 
+#ifndef AUTO_NEXT_LINE
+	#warning "AUTO_NEXT_LINE not defined, using 0 as default"
+	#define AUTO_NEXT_LINE 0
+#endif
+
 #define LCD_COL_COUNT 16
 #define LCD_ROW_COUNT 2
 
